@@ -1,6 +1,5 @@
 package com.example.nycschoolsapplication.data
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +11,8 @@ class SchoolViewModel(private val repository: SchoolRepository) : ViewModel() {
     private val _schools = MutableStateFlow(Result.Loading as Result)
     val schools: StateFlow<Result> = _schools
 
-    private val _selectedSchool = MutableStateFlow(School("", "", ""))
-    val selectedSchool: StateFlow<School> = _selectedSchool
+    private val _selectedSchool = MutableStateFlow(SchoolInfo())
+    val selectedSchool: StateFlow<SchoolInfo> = _selectedSchool
 
     fun fetchSchools() {
         viewModelScope.launch {
@@ -25,13 +24,13 @@ class SchoolViewModel(private val repository: SchoolRepository) : ViewModel() {
         }
     }
 
-    fun selectSchool(school: School) {
+    fun selectSchool(school: SchoolInfo) {
         _selectedSchool.value = school
     }
 
     sealed class Result {
         data object Loading : Result()
-        data class Success(val schools: List<School>) : Result()
+        data class Success(val schools: List<SchoolInfo>) : Result()
         data class Error(val message: String) : Result()
     }
 }
